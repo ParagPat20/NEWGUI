@@ -5,12 +5,12 @@ import tkintermapview
 import tkinter
 import logging
 
-MCU_host = '192.168.54.229'
+MCU_host = '192.168.22.173'
 CD1_host = '192.168.54.101'
 CD2_host = '192.168.54.225'
 CD3_host = CD2_host
 CD4_host = CD1_host
-pc = '192.168.54.192'
+pc = '192.168.22.161'
 hosts = {
     'MCU' : MCU_host,
     'CD1' : CD1_host,
