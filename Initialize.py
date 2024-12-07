@@ -709,7 +709,7 @@ class INIT(Frame):
     def connect(self,drone):
         
         if drone == 'MCU':
-            send(MCU_host, 'initialize_MCU()')
+            send(MCU_host, 'initialize_drones()')
             self.button_3.destroy()
             self.parent.mcuoffbtn()
             json_data["mcuconnected"] = True
@@ -733,7 +733,7 @@ class INIT(Frame):
 
 
         if drone == 'CD1':
-            send(CD1_host, 'initialize_CD1()')
+            send(CD1_host, 'initialize_drones()')
             self.button_31.destroy()
             self.parent.cd1offbtn()
             json_data["cd1connected"] = True
@@ -757,7 +757,7 @@ class INIT(Frame):
 
             
         if drone == 'CD2':
-            send(CD2_host, 'initialize_CD2()')
+            send(CD2_host, 'initialize_drones()')
             self.button_32.destroy()
             self.parent.cd2offbtn()
             json_data["cd2connected"] = True
@@ -781,7 +781,7 @@ class INIT(Frame):
 
         
         if drone == 'CD3':
-            send(CD3_host, 'initialize_CD3()')
+            send(CD3_host, 'initialize_drones()')
             self.button_33.destroy()
             self.parent.cd3offbtn()
             json_data["cd3connected"] = True
@@ -802,7 +802,7 @@ class INIT(Frame):
                 height=44.0
             )
         if drone == 'CD4':
-            send(CD4_host, 'initialize_CD4()')
+            send(CD4_host, 'initialize_drones()')
             self.button_34.destroy()
             self.parent.cd4offbtn()
             json_data["cd4connected"] = True
