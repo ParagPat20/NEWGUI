@@ -82,19 +82,21 @@ def send(host, immediate_command_str):
     global connected_hosts
     global clients
 
+    print(f"Sending command to {host}: {immediate_command_str}")
+
     try:
         if host not in connected_hosts:
             connect_and_register_socket(host)
             log_start_message="log_reset_server()"
             clients[host].send(log_start_message.encode(), zmq.NOBLOCK)  # Non-blocking send
-
-
             immediate_command_str = str(immediate_command_str)
 
         clients[host].send(immediate_command_str.encode(), zmq.NOBLOCK)  # Non-blocking send
         logger.log("Command sent successfully to {}".format(host))
+        print(f"Command sent successfully to {host}: {immediate_command_str}")
 
-    except zmq.error.Again:  # Handle non-blocking send errors
+    except zmq.error.Again:
+        print(f"Retrying send to {host}...")
         poller.register(clients[host], zmq.POLLOUT)  # Wait for socket readiness
         socks = dict(poller.poll(1000))
         if clients[host] in socks and socks[clients[host]] == zmq.POLLOUT:
@@ -104,8 +106,9 @@ def send(host, immediate_command_str):
             reconnect_socket(host)
 
     except zmq.error.ZMQError as e:
+        print(f"Error sending to {host}: {e}")
         logger.log("PC Host {host}: {}".format(e))
-        reconnect_socket(host)  # Attempt reconnection
+        reconnect_socket(host)
 
 def connect_and_register_socket(host):
     socket = context.socket(zmq.PUSH)
@@ -361,21 +364,26 @@ class Logger:
                 message = self.router_socket.recv_multipart()
                 message = message[1].decode()
                 message = str(message)
+                print(f"Received message: {message}")
+                
                 try:
                     # Process messages appropriately
                     if message.startswith("sec "):
+                        print(f"Security message received: {message[4:]}")
                         self.log_sec(message[4:])
 
                     elif message.startswith("lat "):
                         parts = message.split()
                         drone_name = parts[1]
                         coordslat[drone_name] = float(parts[2])
+                        print(f"Latitude update for {drone_name}: {coordslat[drone_name]}")
                         self.log_sec(coordslat[drone_name])
 
                     elif message.startswith("lon "):
                         parts = message.split()
                         drone_name = parts[1]
                         coordslon[drone_name] = float(parts[2])
+                        print(f"Longitude update for {drone_name}: {coordslon[drone_name]}")
                         self.log_sec(coordslon[drone_name])
                     else:
                         self.log(message)
